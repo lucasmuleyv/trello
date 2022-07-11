@@ -18,7 +18,7 @@ use App\Http\Controllers\ListController;
 use App\Http\Controllers\CardController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('trello');
 });
 
 Route::apiResource('trello', TrelloController::class);

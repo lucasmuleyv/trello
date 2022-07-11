@@ -5,7 +5,7 @@
             <div>
                 <div class="vm--modal--head">
                     <input class="vm--modal--input" placeholder="Title" type="text" v-model="name">
-                    <button @click="delete_card" class="button button__default">Delete</button>
+                    <button @click="delete_card" class="button button__default" v-if="card_id !== 0">Delete</button>
                 </div>
                 <span class="vm--modal--list">in the list <span class="vm--modal--list__list" v-text="list"></span></span>
             </div>
@@ -70,7 +70,7 @@
         methods: {
             download(){
                 this.$http.get('/download').then(response => {
-                    console.log(response)
+                    window.open('/dump.sql','_blank');
                 }, response => { 
                     alert('Error'); 
                 }); 
@@ -146,6 +146,7 @@
                                 list.cards.push(response.data)
                             }
                         })
+                        this.$modal.hide('my-first-modal');
                     }, response => { 
                         if(response.body?.errors){
                             for (var k in response.body?.errors){
@@ -171,6 +172,7 @@
                                 })
                             }
                         })
+                        this.$modal.hide('my-first-modal');
                     }, response => { 
                         if(response.body?.errors){
                             for (var k in response.body?.errors){
@@ -181,7 +183,6 @@
                         }
                     }); 
                 }
-                this.$modal.hide('my-first-modal');
             },
             cancel(){
                 this.$modal.hide('my-first-modal');
@@ -192,6 +193,11 @@
                 this.card_id = 0
                 this.name = ''
                 this.description = ''
+                this.lists.forEach(list => {
+                    if(list.id === list_id){
+                        this.list = list.name
+                    }
+                })
                 this.$modal.show('my-first-modal');
             },
             show_card(list_id, card_id){
@@ -211,8 +217,6 @@
                 this.$modal.show('my-first-modal');
             },
             log: function(evt, list_id) {
-                window.console.log(evt);
-                window.console.log(list_id);
 
                 if(evt.moved){
                     this.$http.patch('/card/' + evt.moved.element.id,{
