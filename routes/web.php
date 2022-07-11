@@ -13,6 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use App\Http\Controllers\TrelloController;
+use App\Http\Controllers\ListController;
+use App\Http\Controllers\CardController;
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::apiResource('trello', TrelloController::class);
+Route::apiResource('list', ListController::class);
+Route::apiResource('card', CardController::class);
+Route::get('/download',[TrelloController::class, 'download']);
