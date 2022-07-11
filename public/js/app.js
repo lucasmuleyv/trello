@@ -5314,7 +5314,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     download: function download() {
       this.$http.get('/download').then(function (response) {
-        console.log(response);
+        window.open('/dump.sql', '_blank');
       }, function (response) {
         alert('Error');
       });
@@ -5403,6 +5403,8 @@ __webpack_require__.r(__webpack_exports__);
               list.cards.push(response.data);
             }
           });
+
+          _this5.$modal.hide('my-first-modal');
         }, function (response) {
           var _response$body;
 
@@ -5434,6 +5436,8 @@ __webpack_require__.r(__webpack_exports__);
               });
             }
           });
+
+          _this5.$modal.hide('my-first-modal');
         }, function (response) {
           var _response$body5;
 
@@ -5450,32 +5454,37 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
       }
-
-      this.$modal.hide('my-first-modal');
     },
     cancel: function cancel() {
       this.$modal.hide('my-first-modal');
     },
     add_card: function add_card(list_id) {
+      var _this6 = this;
+
       this.list_id = list_id;
       this.list = '';
       this.card_id = 0;
       this.name = '';
       this.description = '';
+      this.lists.forEach(function (list) {
+        if (list.id === list_id) {
+          _this6.list = list.name;
+        }
+      });
       this.$modal.show('my-first-modal');
     },
     show_card: function show_card(list_id, card_id) {
-      var _this6 = this;
+      var _this7 = this;
 
       this.lists.forEach(function (list) {
         if (list.id === list_id) {
           list.cards.forEach(function (card) {
             if (card.id === card_id) {
-              _this6.list_id = list.id;
-              _this6.list = list.name;
-              _this6.card_id = card.id;
-              _this6.name = card.name;
-              _this6.description = card === null || card === void 0 ? void 0 : card.description;
+              _this7.list_id = list.id;
+              _this7.list = list.name;
+              _this7.card_id = card.id;
+              _this7.name = card.name;
+              _this7.description = card === null || card === void 0 ? void 0 : card.description;
             }
           });
         }
@@ -5483,9 +5492,6 @@ __webpack_require__.r(__webpack_exports__);
       this.$modal.show('my-first-modal');
     },
     log: function log(evt, list_id) {
-      window.console.log(evt);
-      window.console.log(list_id);
-
       if (evt.moved) {
         this.$http.patch('/card/' + evt.moved.element.id, {
           name: evt.moved.element.name,
@@ -5629,12 +5635,12 @@ var render = function render() {
         _vm.name = $event.target.value;
       }
     }
-  }), _vm._v(" "), _c("button", {
+  }), _vm._v(" "), _vm.card_id !== 0 ? _c("button", {
     staticClass: "button button__default",
     on: {
       click: _vm.delete_card
     }
-  }, [_vm._v("Delete")])]), _vm._v(" "), _c("span", {
+  }, [_vm._v("Delete")]) : _vm._e()]), _vm._v(" "), _c("span", {
     staticClass: "vm--modal--list"
   }, [_vm._v("in the list "), _c("span", {
     staticClass: "vm--modal--list__list",
